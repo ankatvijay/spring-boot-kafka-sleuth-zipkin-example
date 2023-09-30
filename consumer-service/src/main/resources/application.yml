@@ -1,0 +1,21 @@
+server:
+  tomcat:
+    basedir: "tmp"
+
+spring:
+  application:
+    name: consumer-service
+
+  zipkin:
+    base-url: http://192.168.0.111:9411/
+
+  kafka:
+    bootstrap-servers: 192.168.0.111:9092,192.168.0.111:9093,192.168.0.111:9094,192.168.0.111:9095
+    consumer:
+      bootstrap-servers: ${spring.kafka.bootstrap-servers}
+      group-id: sleuth_zipkin_consumer_group_2
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+
+topic:
+  name: SLEUTH_ZIPKIN_TOPIC_2

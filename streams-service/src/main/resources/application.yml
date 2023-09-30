@@ -1,0 +1,28 @@
+server:
+  tomcat:
+    basedir: "tmp"
+
+spring:
+  application:
+    name: streams-service
+
+  zipkin:
+    base-url: http://192.168.0.111:9411/
+
+  kafka:
+    bootstrap-servers: 192.168.0.111:9092,192.168.0.111:9093,192.168.0.111:9094,192.168.0.111:9095
+    streams:
+      bootstrap-servers: ${spring.kafka.bootstrap-servers}
+      application-id: sleuth_zipkin_consumer_group
+
+  sleuth:
+    messaging:
+      kafka:
+        enabled: true
+        streams:
+          enabled: true
+
+
+topic:
+  source: SLEUTH_ZIPKIN_TOPIC_1
+  destination: SLEUTH_ZIPKIN_TOPIC_2

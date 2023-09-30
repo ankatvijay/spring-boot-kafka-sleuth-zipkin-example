@@ -1,0 +1,33 @@
+server:
+  port: 8080
+
+  # base context-path
+  servlet:
+    context-path: /kafka
+
+  # tmp path
+  tomcat:
+    basedir: "tmp"
+
+spring:
+  application:
+    name: producer-service
+
+# zipkin config details
+  zipkin:
+    base-url: http://192.168.0.111:9411/
+
+# kafka config details
+  kafka:
+    bootstrap-servers: 192.168.0.111:9092,192.168.0.111:9093,192.168.0.111:9094,192.168.0.111:9095
+    producer:
+      bootstrap-servers: ${spring.kafka.bootstrap-servers}
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+
+topic:
+  name: SLEUTH_ZIPKIN_TOPIC_1
+
+
+
+
