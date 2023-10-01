@@ -15,14 +15,6 @@ spring:
       bootstrap-servers: ${spring.kafka.bootstrap-servers}
       application-id: sleuth_zipkin_consumer_group
 
-  sleuth:
-    messaging:
-      kafka:
-        enabled: true
-        streams:
-          enabled: true
-
-
 topic:
   source: SLEUTH_ZIPKIN_TOPIC_1
   destination: SLEUTH_ZIPKIN_TOPIC_2
