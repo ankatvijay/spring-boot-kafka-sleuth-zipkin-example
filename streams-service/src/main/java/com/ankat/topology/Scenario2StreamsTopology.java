@@ -7,11 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.kstream.Consumed;
-import org.apache.kafka.streams.kstream.Printed;
 import org.apache.kafka.streams.kstream.Produced;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.cloud.sleuth.Span;
-import org.springframework.cloud.sleuth.Tracer;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -20,15 +17,15 @@ import javax.annotation.PostConstruct;
 @RequiredArgsConstructor
 @EnableConfigurationProperties(TopicProperties.class)
 @Component
-public class StreamsTopology {
+public class Scenario2StreamsTopology {
 
-    private final StreamsBuilder streamsBuilder;
+    private final StreamsBuilder scenario2StreamsBuilderFactoryBean;
     private final TopicProperties topicProperties;
 
     @PostConstruct
     public void runStreams() {
-        var streams = streamsBuilder.stream(topicProperties.getScenarios().get(1).getScenario().get(0).getName(), Consumed.with(Serdes.String(), Serdes.String()));
+        var streams = scenario2StreamsBuilderFactoryBean.stream(topicProperties.getScenarios().get(2).getScenario().get(0).getName(), Consumed.with(Serdes.String(), Serdes.String()));
         streams.transform(new HeaderTransformerSupplier());
-        streams.to(topicProperties.getScenarios().get(1).getScenario().get(1).getName(), Produced.with(Serdes.String(), Serdes.String()));
+        streams.to(topicProperties.getScenarios().get(2).getScenario().get(1).getName(), Produced.with(Serdes.String(), Serdes.String()));
     }
 }

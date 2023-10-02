@@ -28,3 +28,11 @@ topic:
           consumer-group: sleuth_zipkin_consumer_group_case_2_1
         - name: SLEUTH_ZIPKIN_TOPIC_CASE_2_2
           consumer-group: sleuth_zipkin_consumer_group_case_2_2
+    -
+      scenario:
+        - name: SLEUTH_ZIPKIN_TOPIC_CASE_3_1
+          consumer-group: sleuth_zipkin_consumer_group_case_3_1
+        - name: SLEUTH_ZIPKIN_TOPIC_CASE_3_2
+          consumer-group: sleuth_zipkin_consumer_group_case_3_2
+        - name: SLEUTH_ZIPKIN_TOPIC_CASE_3_3
+          consumer-group: sleuth_zipkin_consumer_group_case_3_3
