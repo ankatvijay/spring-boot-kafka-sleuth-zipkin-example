@@ -48,6 +48,6 @@ public class ProducerService {
         kafkaTemplate.send(record).completable().get();
         CompletableFuture<String> completableFuture = new CompletableFuture<>();
         pendingRequest.add(tracer.currentSpan().context().spanId(),completableFuture);
-        return completableFuture.get(300,TimeUnit.MILLISECONDS);
+        return completableFuture.get();
     }
 }

@@ -3,7 +3,7 @@ server:
 
   # base context-path
   servlet:
-    context-path: /kafka
+    context-path: /sleuth
 
   # tmp path
   tomcat:

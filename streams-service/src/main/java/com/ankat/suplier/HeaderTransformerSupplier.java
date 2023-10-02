@@ -40,7 +40,7 @@ public class HeaderTransformerSupplier implements TransformerSupplier<String, St
             Optional<Header> internalHeader = StreamSupport.stream(headers.spliterator(), false).filter(header -> "trace_id".equals(header.key())).findFirst();
             if (internalHeader.isPresent()) {
                 headers.add("trace_id", internalHeader.get().value());
-                System.out.printf("%s  INFO [streams-service,%s,] --- %s : Message with key: %s and value: %s on topic: %s in partition: %d\n", LocalDateTime.now().format(dateTimeFormatter), new String(internalHeader.get().value()), this.getClass().getName(), key, value, context.topic(), context.partition());
+                System.out.printf("%s  INFO [streams-service,%s,%s] --- %s : Message with key: %s and value: %s on topic: %s in partition: %d\n", LocalDateTime.now().format(dateTimeFormatter), new String(internalHeader.get().value()),new String(internalHeader.get().value()), this.getClass().getName(), key, value, context.topic(), context.partition());
             }
             return KeyValue.pair(key, value);
         }

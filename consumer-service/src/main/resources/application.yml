@@ -1,4 +1,11 @@
 server:
+  port: 8081
+
+  # base context-path
+  servlet:
+    context-path: /sleuth
+
+  # tmp path
   tomcat:
     basedir: "tmp"
 
