@@ -13,8 +13,18 @@ spring:
     bootstrap-servers: 192.168.0.111:9092,192.168.0.111:9093,192.168.0.111:9094,192.168.0.111:9095
     streams:
       bootstrap-servers: ${spring.kafka.bootstrap-servers}
-      application-id: sleuth_zipkin_consumer_group
+      application-id: ${topic.scenarios[1].scenario.[0].consumer-group} #sleuth_zipkin_consumer_group
 
 topic:
-  source: SLEUTH_ZIPKIN_TOPIC_1
-  destination: SLEUTH_ZIPKIN_TOPIC_2
+  scenarios:
+    -
+      scenario:
+        -
+          name: SLEUTH_ZIPKIN_TOPIC_CASE_1_1
+          consumer-group: sleuth_zipkin_consumer_group_case_1_1
+    -
+      scenario:
+        - name: SLEUTH_ZIPKIN_TOPIC_CASE_2_1
+          consumer-group: sleuth_zipkin_consumer_group_case_2_1
+        - name: SLEUTH_ZIPKIN_TOPIC_CASE_2_2
+          consumer-group: sleuth_zipkin_consumer_group_case_2_2

@@ -27,8 +27,8 @@ public class StreamsTopology {
 
     @PostConstruct
     public void runStreams() {
-        var streams = streamsBuilder.stream(topicProperties.getSource(), Consumed.with(Serdes.String(), Serdes.String()));
+        var streams = streamsBuilder.stream(topicProperties.getScenarios().get(1).getScenario().get(0).getName(), Consumed.with(Serdes.String(), Serdes.String()));
         streams.transform(new HeaderTransformerSupplier());
-        streams.to(topicProperties.getDestination(), Produced.with(Serdes.String(), Serdes.String()));
+        streams.to(topicProperties.getScenarios().get(1).getScenario().get(1).getName(), Produced.with(Serdes.String(), Serdes.String()));
     }
 }

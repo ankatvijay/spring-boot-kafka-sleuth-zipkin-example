@@ -13,9 +13,20 @@ spring:
     bootstrap-servers: 192.168.0.111:9092,192.168.0.111:9093,192.168.0.111:9094,192.168.0.111:9095
     consumer:
       bootstrap-servers: ${spring.kafka.bootstrap-servers}
-      group-id: sleuth_zipkin_consumer_group_2
+#      group-id: sleuth_zipkin_consumer_group_2
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
 
 topic:
-  name: SLEUTH_ZIPKIN_TOPIC_2
+  scenarios:
+    -
+      scenario:
+        -
+          name: SLEUTH_ZIPKIN_TOPIC_CASE_1_1
+          consumer-group: sleuth_zipkin_consumer_group_case_1_1
+    -
+      scenario:
+        - name: SLEUTH_ZIPKIN_TOPIC_CASE_2_1
+          consumer-group: sleuth_zipkin_consumer_group_case_2_1
+        - name: SLEUTH_ZIPKIN_TOPIC_CASE_2_2
+          consumer-group: sleuth_zipkin_consumer_group_case_2_2

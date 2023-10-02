@@ -19,17 +19,17 @@ import java.util.UUID;
 public class ProducerService {
 
     private final KafkaTemplate<String, String> kafkaTemplate;
-    private final TopicProperties topicProperties;
     private final Tracer tracer;
 
-    public void sendMessage(String json) {
-        ProducerRecord<String, String> record = new ProducerRecord<>(topicProperties.getName(), UUID.randomUUID().toString(), json);
+
+    public void sendMessage(String topicName, String json) {
+        ProducerRecord<String, String> record = new ProducerRecord<>(topicName, UUID.randomUUID().toString(), json);
         record.headers().add(new RecordHeader("Created_Timestamp", Long.toString(System.currentTimeMillis()).getBytes()));
         record.headers().add(new RecordHeader("trace_id", tracer.currentSpan().context().spanId().getBytes()));
-        log.info("Trace-Id: {}",tracer.currentSpan().context().spanId());
+        log.info("Trace-Id: {}", tracer.currentSpan().context().spanId());
         kafkaTemplate.send(record).addCallback(
                 result -> {
-                    log.info("Message sent successfully for the key: {} and value: {} on partition: {}", result.getProducerRecord().key(), result.getProducerRecord().value(), result.getRecordMetadata().partition());
+                    log.info("Message sent successfully for the key: {} and value: {} on topic: {} in partition: {}", result.getProducerRecord().key(), result.getProducerRecord().value(), result.getRecordMetadata().topic(), result.getRecordMetadata().partition());
                 },
                 ex -> {
                     log.info("Error sending message and exception is {}", ex.getMessage(), ex);

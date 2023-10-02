@@ -1,5 +1,6 @@
 package com.ankat.config;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.admin.AdminClientConfig;
 import org.apache.kafka.clients.admin.NewTopic;
@@ -10,26 +11,20 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.config.TopicBuilder;
 import org.springframework.kafka.core.KafkaAdmin;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
+@RequiredArgsConstructor
+@EnableConfigurationProperties(TopicProperties.class)
 @Configuration
-@EnableConfigurationProperties(value = {TopicProperties.class, KafkaProperties.class})
 public class TopicConfig {
-
-    /*
     @Bean
-    public KafkaAdmin kafkaAdmin(KafkaProperties properties) {
-        Map<String, Object> configs = new HashMap<>();
-        configs.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, properties.getBootstrapServers());
-        return new KafkaAdmin(configs);
-    }
-    */
-
-    @Bean
-    public NewTopic testTopic(TopicProperties topicProperties) {
-        log.info("Create Topic : {}",topicProperties.getName());
-        return TopicBuilder.name(topicProperties.getName()).partitions(4).replicas(4).build();
+    public KafkaAdmin.NewTopics createKafkaTopics(TopicProperties topicProperties) {
+        NewTopic[] topics = topicProperties.getScenarios().stream().flatMap(scenario -> scenario.getScenario().stream()).map(TopicProperties.Topic::getName).map(topic -> TopicBuilder.name(topic).partitions(4).replicas(4).build()).toArray(NewTopic[]::new);
+        return new KafkaAdmin.NewTopics(topics);
     }
 }
