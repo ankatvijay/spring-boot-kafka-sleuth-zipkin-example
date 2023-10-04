@@ -1,7 +1,7 @@
 package com.ankat.topology;
 
 import com.ankat.config.TopicProperties;
-import com.ankat.suplier.HeaderTransformerSupplier;
+import com.ankat.suplier.MessageTransformerSupplier;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.common.serialization.Serdes;
@@ -25,7 +25,7 @@ public class Scenario2StreamsTopology {
     @PostConstruct
     public void runStreams() {
         var streams = scenario2StreamsBuilderFactoryBean.stream(topicProperties.getScenarios().get(2).getScenario().get(0).getName(), Consumed.with(Serdes.String(), Serdes.String()));
-        streams.transform(new HeaderTransformerSupplier());
+        streams.transform(new MessageTransformerSupplier());
         streams.to(topicProperties.getScenarios().get(2).getScenario().get(1).getName(), Produced.with(Serdes.String(), Serdes.String()));
     }
 }
