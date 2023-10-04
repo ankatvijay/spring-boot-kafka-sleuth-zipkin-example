@@ -14,9 +14,6 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
-import java.util.concurrent.atomic.AtomicReference;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -33,21 +30,25 @@ public class ProducerService {
         ProducerRecord<String, String> record = new ProducerRecord<>(topicName, UUID.randomUUID().toString(), json);
         record.headers().add(new RecordHeader("trace_id", tracer.currentSpan().context().spanId().getBytes()));
         kafkaTemplate.send(record).addCallback(
-                result -> {
-                    log.info("Message sent successfully for the key: {} and value: {} on topic: {} in partition: {}", result.getProducerRecord().key(), result.getProducerRecord().value(), result.getRecordMetadata().topic(), result.getRecordMetadata().partition());
-                },
-                ex -> {
-                    log.info("Error sending message and exception is {}", ex.getMessage(), ex);
-                }
+                result -> log.info("Message sent successfully for the key: {} and value: {} on topic: {} in partition: {}", result.getProducerRecord().key(), result.getProducerRecord().value(), result.getRecordMetadata().topic(), result.getRecordMetadata().partition()),
+                ex -> log.info("Error sending message and exception is {}", ex.getMessage(), ex)
         );
     }
 
-    public String sendAsyncMessage(String topicName, String json) throws ExecutionException, InterruptedException, TimeoutException {
+    public String sendAsyncMessage(String topicName, String json) throws ExecutionException, InterruptedException {
+        CompletableFuture<String> completableFuture = new CompletableFuture<>();
         ProducerRecord<String, String> record = new ProducerRecord<>(topicName, UUID.randomUUID().toString(), json);
         record.headers().add(new RecordHeader("trace_id", tracer.currentSpan().context().spanId().getBytes()));
-        kafkaTemplate.send(record).completable().get();
-        CompletableFuture<String> completableFuture = new CompletableFuture<>();
-        pendingRequest.add(tracer.currentSpan().context().spanId(),completableFuture);
+        kafkaTemplate.send(record).completable().whenComplete((result, ex) -> {
+            if (ex == null) {
+                log.info("Message sent successfully for the key: {} and value: {} on topic: {} in partition: {}", result.getProducerRecord().key(), result.getProducerRecord().value(), result.getRecordMetadata().topic(), result.getRecordMetadata().partition());
+                pendingRequest.add(tracer.currentSpan().context().spanId(), completableFuture);
+            } else {
+                log.info("Error sending message and exception is {}", ex.getMessage(), ex);
+            }
+        });
+        //kafkaTemplate.send(record).completable().get();
+        //pendingRequest.add(tracer.currentSpan().context().spanId(),completableFuture);
         return completableFuture.get();
     }
 }
