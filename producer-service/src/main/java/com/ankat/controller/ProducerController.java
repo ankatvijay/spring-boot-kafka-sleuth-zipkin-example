@@ -41,7 +41,7 @@ public class ProducerController {
     }
 
     @PostMapping(value = "/kafka/publishToAsync", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> publishToAsync(HttpEntity<String> json) throws ExecutionException, InterruptedException, TimeoutException {
+    public ResponseEntity<String> publishToAsync(HttpEntity<String> json) throws ExecutionException, InterruptedException {
         String response = producerService.sendAsyncMessage(TopicUtil.getScenarioTopicName(topicProperties, 2, 0), json.getBody());
         return ResponseEntity.ok(response);
     }
