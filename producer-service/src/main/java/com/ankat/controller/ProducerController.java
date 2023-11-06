@@ -50,7 +50,7 @@ public class ProducerController {
     public ResponseEntity<String> publishToHTTP(@RequestParam("emp-id") String empId, @RequestParam("emp-name") String empName, @RequestParam("emp-address") String empAddress) {
         String json = "{\"emp-id\":" + empId + ",\"emp-name\":\"" + empName + "\",\"emp-address\":\"" + empAddress + "\"}";
         HttpEntity<String> httpEntity = new HttpEntity<>(json);
-        String response = restTemplate.postForObject("http://localhost:8081/sleuth/web/responseToHTTP", httpEntity, String.class);
+        String response = restTemplate.postForObject("http://localhost:8070/sleuth/web/responseToHTTP", httpEntity, String.class);
         return ResponseEntity.ok(response);
     }
 }

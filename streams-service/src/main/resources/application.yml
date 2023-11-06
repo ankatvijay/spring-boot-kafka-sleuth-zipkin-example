@@ -7,7 +7,7 @@ spring:
     name: streams-service
 
   zipkin:
-    base-url: http://192.168.0.111:9411/
+    base-url: http://127.0.0.1:9411/
 
   kafka:
     bootstrap-servers: 192.168.0.111:9092,192.168.0.111:9093,192.168.0.111:9094,192.168.0.111:9095

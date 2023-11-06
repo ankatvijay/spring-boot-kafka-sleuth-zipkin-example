@@ -9,8 +9,10 @@ import org.apache.kafka.common.header.internals.RecordHeader;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.sleuth.Tracer;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -39,6 +41,7 @@ public class ProducerService {
         CompletableFuture<String> completableFuture = new CompletableFuture<>();
         ProducerRecord<String, String> record = new ProducerRecord<>(topicName, UUID.randomUUID().toString(), json);
         record.headers().add(new RecordHeader("trace_id", tracer.currentSpan().context().spanId().getBytes()));
+        /*
         kafkaTemplate.send(record).completable().whenComplete((result, ex) -> {
             if (ex == null) {
                 log.info("Message sent successfully for the key: {} and value: {} on topic: {} in partition: {}", result.getProducerRecord().key(), result.getProducerRecord().value(), result.getRecordMetadata().topic(), result.getRecordMetadata().partition());
@@ -47,8 +50,14 @@ public class ProducerService {
                 log.info("Error sending message and exception is {}", ex.getMessage(), ex);
             }
         });
-        //kafkaTemplate.send(record).completable().get();
-        //pendingRequest.add(tracer.currentSpan().context().spanId(),completableFuture);
+        */
+        SendResult<String, String> result = kafkaTemplate.send(record).completable().get();
+        if (Objects.nonNull(result)) {
+            log.info("Message sent successfully for the key: {} and value: {} on topic: {} in partition: {}", result.getProducerRecord().key(), result.getProducerRecord().value(), result.getRecordMetadata().topic(), result.getRecordMetadata().partition());
+            pendingRequest.add(tracer.currentSpan().context().spanId(), completableFuture);
+        } else {
+            throw new RuntimeException("Error sending message");
+        }
         return completableFuture.get();
     }
 }
