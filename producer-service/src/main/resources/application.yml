@@ -19,7 +19,7 @@ spring:
 
 # kafka config details
   kafka:
-    bootstrap-servers: 192.168.0.111:9092,192.168.0.111:9093,192.168.0.111:9094,192.168.0.111:9095
+    bootstrap-servers: 127.0.0.1:19092,127.0.0.1:19093,127.0.0.1:19094,127.0.0.1:19095
     producer:
       bootstrap-servers: ${spring.kafka.bootstrap-servers}
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
@@ -50,3 +50,12 @@ topic:
           consumer-group: sleuth_zipkin_consumer_group_case_3_2
         - name: SLEUTH_ZIPKIN_TOPIC_CASE_3_3
           consumer-group: sleuth_zipkin_consumer_group_case_3_3
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+  endpoints:
+    web:
+      exposure:
+        include: info, health, metrics, prometheus
