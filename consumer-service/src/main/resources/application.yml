@@ -16,6 +16,17 @@ spring:
   zipkin:
     base-url: http://127.0.0.1:9411/
 
+  # h2 database config
+  h2:
+    console.enabled: true
+  datasource:
+    url: jdbc:h2:mem:mydb
+    username: sa
+    password: password
+    driverClassName: org.h2.Driver
+  jpa:
+    spring.jpa.database-platform: org.hibernate.dialect.H2Dialect
+
   kafka:
     bootstrap-servers: 127.0.0.1:19092,127.0.0.1:19093,127.0.0.1:19094,127.0.0.1:19095
     producer:
@@ -49,6 +60,11 @@ topic:
           consumer-group: sleuth_zipkin_consumer_group_case_3_2
         - name: SLEUTH_ZIPKIN_TOPIC_CASE_3_3
           consumer-group: sleuth_zipkin_consumer_group_case_3_3
+    -
+      scenario:
+        -
+          name: SLEUTH_ZIPKIN_TOPIC_CASE_4_1
+          consumer-group: sleuth_zipkin_consumer_group_case_4_1
 
 management:
   tracing:
@@ -57,10 +73,34 @@ management:
   endpoints:
     web:
       exposure:
-        include: info, health, metrics, prometheus
+        include: health,info,prometheus,metrics
   metrics:
     distribution:
       percentiles-histogram:
         http:
           server:
             requests: true
+    tags:
+      application: ${spring.application.name}
+  endpoint:
+    health:
+      show-details: always
+
+# swagger-ui custom pathpath=/swagger-ui.html
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: /api-docs
+
+
+#jdbc.datasource-proxy.query.enable-logging: true
+
+# logging configuration
+#jdbc.datasource-proxy.logging: slf4j
+#jdbc.datasource-proxy.query.log-level: DEBUG
+#jdbc.datasource-proxy.query.logger-name: my.query-logger
+#jdbc.datasource-proxy.multiline: false
+
+# spring boot log level property
+#logging.level.my.query-logger: DEBUG,

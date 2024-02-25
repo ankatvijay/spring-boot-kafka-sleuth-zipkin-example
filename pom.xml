@@ -20,8 +20,10 @@
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spring.boot.dependencies.version>3.2.2</spring.boot.dependencies.version>
+        <spring.boot.dependencies.version>3.2.3</spring.boot.dependencies.version>
         <spring.cloud.version>2023.0.0</spring.cloud.version>
+        <micrometer-tracing.version>1.2.3</micrometer-tracing.version>
+        <springdoc-openapi.version>1.7.0</springdoc-openapi.version>
     </properties>
 
     <dependencyManagement>
@@ -34,6 +36,7 @@
                 <scope>import</scope>
             </dependency>
 
+            <!--
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
@@ -41,6 +44,15 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+
+            <dependency>
+                <groupId>io.micrometer</groupId>
+                <artifactId>micrometer-tracing-bom</artifactId>
+                <version>${micrometer-tracing.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            -->
         </dependencies>
     </dependencyManagement>
 
@@ -70,6 +82,11 @@
 
         <dependency>
             <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.micrometer</groupId>
             <artifactId>micrometer-tracing-bridge-brave</artifactId>
         </dependency>
 
@@ -78,6 +95,13 @@
             <artifactId>loki-logback-appender</artifactId>
             <version>1.4.2</version>
         </dependency>
+
+        <!--
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+        -->
     </dependencies>
 
     <build>

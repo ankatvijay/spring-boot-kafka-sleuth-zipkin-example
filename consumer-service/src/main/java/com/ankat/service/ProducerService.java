@@ -1,6 +1,8 @@
 package com.ankat.service;
 
 import com.ankat.config.TopicProperties;
+import com.ankat.model.Employee;
+import com.ankat.repository.EmployeeRepository;
 import com.ankat.util.TopicUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +25,7 @@ import java.util.stream.StreamSupport;
 public class ProducerService {
     private final TopicProperties topicProperties;
     private final KafkaTemplate<String, String> kafkaTemplate;
+    private final EmployeeRepository employeeRepository;
 
     public void sendMessage(ConsumerRecord<String, String> consumerRecord) {
         ProducerRecord<String, String> record = new ProducerRecord<>(TopicUtil.getScenarioTopicName(topicProperties, 2, 2), consumerRecord.key(), consumerRecord.value());
@@ -40,5 +43,9 @@ public class ProducerService {
                     log.info("Error sending message and exception is {}", ex.getMessage(), ex);
                 }
         );
+    }
+
+    public Employee insertRecord(Employee employee) {
+        return employeeRepository.save(employee);
     }
 }

@@ -23,7 +23,6 @@ import java.util.concurrent.ExecutionException;
 @Service
 public class ProducerService {
 
-
     private final KafkaTemplate<String, String> kafkaTemplate;
     private final PendingRequest pendingRequest;
     private final Tracer tracer;
